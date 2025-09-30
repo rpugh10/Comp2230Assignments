@@ -1,83 +1,66 @@
-import java.util.Arrays;
+package Practice;
 
-public class DropoutStack<T> implements StackADT<T>{
+import java.util.EmptyStackException;
 
-    private final static int DEFAULT_CAPACITY = 5;
-    private int top;
-    private T[] stack;
+public class DropoutStack<T> extends ArrayStack<T>{
+
     private int counter;
-
+    
     public DropoutStack(){
-        this(DEFAULT_CAPACITY);
-    }
-
-    @SuppressWarnings("unchecked")
-    public DropoutStack(int initialCapacity){
-        top = 0;
+        super();
         counter = 0;
-        stack = (T[])(new Object[initialCapacity]);
     }
 
     public void push(T element){
-       stack[top] = element;
-       top = (top + 1) % stack.length;
 
-       if(counter < stack.length){
+        stack[top] = element;
+        top = (top + 1) % CAPACITY;
+        if(counter < stack.length){
             counter++;
-       }
-       
-    }
-
-    public void expandCapacity(){
-        stack = Arrays.copyOf(stack, stack.length*2);
-    }
-
-    public T pop()throws EmptyCollectionException{
-        if(isEmpty()){
-            throw new EmptyCollectionException("stack");
         }
+    }
 
-        top = (top - 1 + stack.length) % stack.length;
-        T result = stack[top];
+    public T pop(){
+        if(isEmpty()){
+            throw new EmptyStackException();
+        }
+        
+        top = (top - 1 + CAPACITY) % CAPACITY;
+        T element = stack[top];
         stack[top] = null;
         counter--;
-        return result;
+        return element;
     }
 
-    public T peek()throws EmptyCollectionException{
+    public void undoPush(){
         if(isEmpty()){
-            throw new EmptyCollectionException("stack");
-    }
-        int index = (top - 1 + stack.length) % stack.length;
-        return stack[index];
+            throw new EmptyStackException();
+        }
+
+        top = (top - 1 + CAPACITY) %CAPACITY;
+        stack[top] = null;
+        counter--;
     }
 
-     public boolean isEmpty(){
-        return counter == 0;
-    }
-
-    public int size(){
-        return counter;
+    public boolean isEmpty(){
+        return counter ==0;
     }
 
     public String toString(){
-        if (counter == 0) {
-        return "[]";
-    }
+        String result = "[";
+        int start = (top - counter + CAPACITY) % CAPACITY;
 
-    String result = "[";
-    int start = (top - counter + stack.length) % stack.length;
+        for(int i = 0; i < counter; i++){
+            int index = (start + i) % stack.length;
+            result += stack[index];
 
-    for (int i = 0; i < counter; i++) {
-        int index = (start + i) % stack.length;
-        result += stack[index];
-
-        if (i < counter - 1) {
-            result += ", ";
+            if(i < counter - 1){
+                result += ", ";
+            }
         }
+
+        result += "]";
+        return result;
     }
 
-    result += "]";
-    return result;
-    }
 }

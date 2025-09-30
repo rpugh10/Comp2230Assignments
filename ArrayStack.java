@@ -1,52 +1,46 @@
+package Practice;
+
 import java.util.Arrays;
+import java.util.EmptyStackException;
 
-public class ArrayStack<T> implements StackADT<T>{
+public class ArrayStack<T> implements StackADT<T> {
 
-    private final static int DEFAULT_CAPACITY = 100;
-    private int top;
-    private T[] stack;
+    protected static final int CAPACITY = 5;
+    protected T[] stack;
+    protected int top;
 
     public ArrayStack(){
-        this(DEFAULT_CAPACITY);
+        this(CAPACITY);
     }
 
-    @SuppressWarnings("unchecked")
     public ArrayStack(int initialCapacity){
         top = 0;
         stack = (T[])(new Object[initialCapacity]);
     }
 
-    @Override
     public void push(T element){
         if(size() == stack.length){
-            expandCapacity();
+            extendCapacity();
         }
 
-        stack[top] = element;
-        top++;
+       stack[top] = element;
+       top++;
+
     }
 
-    public void expandCapacity(){
-        stack = Arrays.copyOf(stack, stack.length*2);
-    }
-
-    public T pop()throws EmptyCollectionException{
+    public T pop(){
         if(isEmpty()){
-            throw new EmptyCollectionException("stack");
+            throw new EmptyStackException();
         }
 
         top--;
-        T result = stack[top];
+        T element = stack[top];
         stack[top] = null;
+        return element;
 
-        return result;
     }
 
-    public T peek()throws EmptyCollectionException{
-        if(isEmpty()){
-            throw new EmptyCollectionException("stack");
-        }
-
+    public T peek(){
         return stack[top - 1];
     }
 
@@ -58,19 +52,23 @@ public class ArrayStack<T> implements StackADT<T>{
         return top;
     }
 
+    public void extendCapacity(){
+        stack = Arrays.copyOf(stack, stack.length * 2);
+    }
+
     public String toString(){
         if(isEmpty()){
             return "[]";
         }
+
         String result = "[";
 
-        for(int i = 0; i < top; i++){
+        for(int i = 0; i < stack.length; i++){
             result += stack[i];
-            if(i < top - 1){
+            if(i < top){
                 result += ", ";
             }
         }
-
         result += "]";
 
         return result;

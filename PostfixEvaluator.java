@@ -1,57 +1,65 @@
+package Practice;
+
 import java.util.Scanner;
 import java.util.Stack;
 
 public class PostfixEvaluator {
 
-    private final char add = '+';
-    private final char subtract = '-';
-    private final char multiply = '*';
-    private final char divide = '/';
-
     private Stack<Integer> stack;
 
     public PostfixEvaluator(){
-        stack = new Stack<Integer>();
+        stack = new Stack<>();
     }
 
-   public boolean isOperator(String token){
-    return (token.equals("+") || token.equals("-")||
-        token.equals("*") || token.equals("/"));
-   }
+    public boolean isOperator(String expression){
+        return expression.equals("+") || expression.equals("-") ||
+            expression.equals("*") || expression.equals("/");
+    }
 
-   public int calculation(char operation, int num1, int num2){
+    public int doOperation(char operator, int num1, int num2){
+        int result = 0;
 
-        switch(operation){
+        switch(operator){
             case '+':
-                return num1 + num2;
-            case '-':
-                return num1 - num2;
-            case '*':
-                return num1 * num2;
-            case '/':
-                return num1 / num2;
-            default:
-                throw new IllegalArgumentException("Invalid operator: " + operation);
-        }
-   }
+            result = num1 + num2;
+            break;
 
-   public int evaluation(String expression){
+            case '-':
+            result = num1 - num2;
+            break;
+
+            case '*':
+            result = num1 * num2;
+            break;
+
+            case '/':
+            result = num1 / num2;
+            break;
+        }
+
+        return result;
+    }
+
+    public int evaluate(String expression){
+        int num1, num2, result = 0;
         Scanner scan = new Scanner(expression);
         String token;
-        int op1, op2, result = 0;
 
         while(scan.hasNext()){
             token = scan.next();
-                if(isOperator(token)){
-                    op2 = stack.pop();
-                    op1 = stack.pop();
-                    result  = calculation(token.charAt(0), op1, op2);
-                    stack.push(result);
-                }
-                else{
-                    stack.push(Integer.valueOf(token));
-                }
+            if(isOperator(token)){
+                num1 = stack.pop().intValue();
+                num2 = stack.pop().intValue();
+                result = doOperation(token.charAt(0), num1, num2);
+                stack.push(result);
+            }
+            else{
+                stack.push(Integer.parseInt(token));
+            }
         }
-        return result;
-   }
+
+            scan.close();
+            return result;
+    }
+
 }
