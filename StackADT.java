@@ -1,4 +1,4 @@
-package Practice;
+package LinkedStackPractice;
 
 public interface StackADT<T> {
 
@@ -8,9 +8,9 @@ public interface StackADT<T> {
 
     public T peek();
 
-    public boolean isEmpty();
-
     public int size();
+
+    public boolean isEmpty();
 
     public String toString();
 }
