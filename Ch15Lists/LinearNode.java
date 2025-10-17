@@ -1,8 +1,8 @@
-package Ch15Lists;
+package com.ch15lists;
 
 public class LinearNode<T> {
 
-    private T element;
+    private T element; 
     protected LinearNode<T> next;
 
     public LinearNode(){

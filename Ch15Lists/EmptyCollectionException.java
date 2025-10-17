@@ -1,8 +1,8 @@
-package Ch15Lists;
+package com.ch15lists;
 
-public class EmptyCollectionException extends RuntimeException {
+public class EmptyCollectionException extends RuntimeException{
 
-    public EmptyCollectionException(String message){
-        super("The " + message + " is empty");
+    public EmptyCollectionException(String collection){
+        super("The collection " + collection + " is empty");
     }
 }
